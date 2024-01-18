@@ -5,155 +5,106 @@ using Smanageemploy.Services.Contracts;
 
 namespace Smanageemploy.Services.Implementations
 {
-    public class DepartementService : IDepartementService
+    public class AttendanceService
     {
-        private readonly IDepartementRepository _departementRepository;
-        public DepartementService(IDepartementRepository departementRepository)
+        private readonly AttendanceRepository _attendanceRepository;
+
+        public AttendanceService(AttendanceRepository attendanceRepository)
         {
-            _departementRepository = departementRepository;
+            _attendanceRepository = attendanceRepository;
         }
 
-        /// <summary>
-        /// Gets the departments.
-        /// </summary>
-        /// <returns></returns>
-        public async Task<List<ReadDepartment>> GetDepartments()
+        public async Task<ReadAttendance> CreateAttendanceAsync(CreateAttendance attendance)
         {
-            var departments = await _departementRepository.GetDepartmentsAsync();
 
-            List<ReadDepartment> readDepartments = new List<ReadDepartment>();
-
-            foreach (var department in departments)
+            var attendanceTocreate = new Attendance()
             {
-                readDepartments.Add(new ReadDepartment()
-                {
-                    Id = department.DepartmentId,
-                    Name = department.Name,
-                });
-            }
+                EmployeeId = attendance.EmployeeId,
+                StartDate = attendance.StartDate,
+                EndDate = attendance.EndDate,
+            };
 
-            return readDepartments;
-        }
+            var attendanceCreated = await _attendanceRepository.CreateAttendanceAsync(
+                attendanceTocreate
+            );
 
-        /// <summary>
-        /// Gets the department by identifier asynchronous.
-        /// </summary>
-        /// <param name="departmentId">The department identifier.</param>
-        /// <returns></returns>
-        /// <exception cref="System.Exception">Echec de recupération des informations d'un département car il n'existe pas : {departmentId}</exception>
-        public async Task<ReadDepartment> GetDepartmentByIdAsync(int departmentId)
-        {
-            var department = await _departementRepository.GetDepartmentByIdAsync(departmentId);
-
-            if (department is null)
-                throw new Exception($"Echec de recupération des informations d'un département car il n'existe pas : {departmentId}");
-
-            return new ReadDepartment()
+            return new ReadAttendance()
             {
-                Id = department.DepartmentId,
-                Name = department.Name,
+                Id = attendanceCreated.AttendanceId,
+                EmployeeId = (int)attendanceCreated.EmployeeId,
+                StartDate = attendanceCreated.StartDate,
+                EndDate = attendanceCreated.EndDate,
             };
         }
 
-        /// <summary>
-        /// Gets the department by name asynchronous.
-        /// </summary>
-        /// <param name="departmentName">Name of the department.</param>
-        /// <returns></returns>
-        /// <exception cref="System.Exception">Echec de recupération des informations d'un département car il n'existe pas de nom correspondant : {departmentName}</exception>
-        public async Task<ReadDepartment> GetDepartmentByNameAsync(string departmentName)
+        public async Task<List<ReadAttendance>> GetAttendances()
         {
-            var department = await _departementRepository.GetDepartmentByNameAsync(departmentName);
+            var attendances = await _attendanceRepository.GetAttendancesAsync();
 
-            if (department is null)
-                throw new Exception($"Echec de recupération des informations d'un département car il n'existe pas de nom correspondant : {departmentName}");
+            List<ReadAttendance> readAttendances = new List<ReadAttendance>();
 
-            return new ReadDepartment()
+            foreach (var attendance in attendances)
             {
-                Id = department.DepartmentId,
-                Name = department.Name,
+                readAttendances.Add(
+                    new ReadAttendance()
+                    {
+                        Id = attendance.AttendanceId,
+                        EmployeeId = (int)attendance.EmployeeId,
+                        StartDate = attendance.StartDate,
+                        EndDate = attendance.EndDate,
+                    }
+                );
+            }
+
+            return readAttendances;
+        }
+
+        public async Task<ReadAttendance> GetAttendanceByIdAsync(int attendanceId)
+        {
+            var attendance = await _attendanceRepository.GetAttendanceByIdAsync(attendanceId);
+
+            if (attendance is null)
+                throw new Exception(
+                    $"Echec de recupération des informations d'un département car il n'existe pas : {attendanceId}"
+                );
+
+            return new ReadAttendance()
+            {
+                Id = attendance.AttendanceId,
+                EmployeeId = (int)attendance.EmployeeId,
+                StartDate = attendance.StartDate,
+                EndDate = attendance.EndDate,
             };
         }
 
-        /// <summary>
-        /// Updates the department asynchronous.
-        /// </summary>
-        /// <param name="departmentId">The department identifier.</param>
-        /// <param name="department">The department.</param>
-        /// <exception cref="System.Exception">
-        /// Echec de mise à jour d'un département : Il n'existe aucun departement avec cet identifiant : {departmentId}
-        /// or
-        /// Echec de mise à jour d'un département : Il existe déjà un département avec ce nom {department.Name}
-        /// </exception>
-        public async Task UpdateDepartmentAsync(int departmentId, UpdateDepartment department)
+        public async Task<Attendance> UpdateAttendanceAsync(
+            int attendanceId,
+            UpdateAttendance attendance
+        )
         {
-            var departmentGet = await _departementRepository.GetDepartmentByIdAsync(departmentId)
-                ?? throw new Exception($"Echec de mise à jour d'un département : Il n'existe aucun departement avec cet identifiant : {departmentId}");
+            var attendanceUpdate =
+                await _attendanceRepository.GetAttendanceByIdAsync(attendanceId)
+                ?? throw new Exception(
+                    $"Echec de mise à jour d'un département : Il n'existe aucun attendance avec cet identifiant : {attendanceId}"
+                );
 
-            var departmentGetByName = await _departementRepository.GetDepartmentByNameAsync(department.Name);
-            if (departmentGetByName is not null && departmentId != departmentGetByName.DepartmentId)
-            {
-                throw new Exception($"Echec de mise à jour d'un département : Il existe déjà un département avec ce nom {department.Name}");
-            }
 
-            departmentGet.Name = department.Name;
-            departmentGet.Description = department.Description;
-            departmentGet.Address = department.Address;
+            attendanceUpdate.EmployeeId = attendance.EmployeeId;
+            attendanceUpdate.StartDate = attendance.StartDate;
+            attendanceUpdate.EndDate = attendance.EndDate;
 
-            await _departementRepository.UpdateDepartmentAsync(departmentGet);
-
+            return await _attendanceRepository.UpdateAttendanceAsync(attendanceUpdate);
         }
 
-        /// <summary>
-        /// Deletes the department by identifier.
-        /// </summary>
-        /// <param name="departmentId">The department identifier.</param>
-        /// <exception cref="System.Exception">
-        /// Echec de suppression d'un département : Il n'existe aucun departement avec cet identifiant : {departmentId}
-        /// or
-        /// Echec de suppression car ce departement est lié à des employés
-        /// </exception>
-        public async Task DeleteDepartmentById(int departmentId)
+        public async Task<Attendance> DeleteAttendanceById(int attendanceId)
         {
-            var departmentGet = await _departementRepository.GetDepartmentByIdWithIncludeAsync(departmentId)
-              ?? throw new Exception($"Echec de suppression d'un département : Il n'existe aucun departement avec cet identifiant : {departmentId}");
+            var attendanceGet =
+                await _attendanceRepository.GetAttendanceByIdWithIncludeAsync(attendanceId)
+                ?? throw new Exception(
+                    $"Echec de suppression d'un département : Il n'existe aucun attendance avec cet identifiant : {attendanceId}"
+                );
 
-            if (departmentGet.Employees.Any())
-            {
-                throw new Exception("Echec de suppression car ce departement est lié à des employés");
-            }
-
-            await _departementRepository.DeleteDepartmentByIdAsync(departmentId);
-        }
-
-        /// <summary>
-        /// Creates the department asynchronous.
-        /// </summary>
-        /// <param name="department">The department.</param>
-        /// <returns></returns>
-        /// <exception cref="System.Exception">Echec de création d'un département : Il existe déjà un département avec ce nom {department.Name}</exception>
-        public async Task<ReadDepartment> CreateDepartmentAsync(CreateDepartment department)
-        {
-            var departmentGet = await _departementRepository.GetDepartmentByNameAsync(department.Name);
-            if (departmentGet is not null)
-            {
-                throw new Exception($"Echec de création d'un département : Il existe déjà un département avec ce nom {department.Name}");
-            }
-
-            var departementTocreate = new Department()
-            {
-                Name = department.Name,
-                Description = department.Description,
-                Address = department.Address,
-            };
-
-            var departmentCreated = await _departementRepository.CreateDepartmentAsync(departementTocreate);
-
-            return new ReadDepartment()
-            {
-                Id = departmentCreated.DepartmentId,
-                Name = departmentCreated.Name,
-            };
+            return await _attendanceRepository.DeleteAttendanceByIdAsync(attendanceId);
         }
     }
 }

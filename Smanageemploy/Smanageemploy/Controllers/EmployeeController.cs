@@ -11,71 +11,37 @@ namespace Smanageemploy.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DepartmentsController : ControllerBase
+    public class EmployeesController : ControllerBase
     {
-        private readonly IDepartementService _departementService;
+        private readonly EmployeeService _employeeService;
 
-        public DepartmentsController(IDepartementService departementService)
+        public EmployeesController(EmployeeService employeeService)
         {
-            _departementService = departementService;
+            _employeeService = employeeService;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<ReadDepartment>>> GetDepartmentsAsync()
-        {
-            var departments = await _departementService.GetDepartments();
-            return Ok(departments);
-        }
-
-        [HttpGet("{name}")]
-        public async Task<ActionResult<ReadDepartment>> GetDepartmentByIdAsync(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                BadRequest("Echec de recupération d'un departement : le nom du departement est invalide");
-
-            try
-            {
-                var department = await _departementService.GetDepartmentByNameAsync(name);
-                return Ok(department);
-            }
-            catch(Exception ex)
-            {
-                return Problem(ex.Message);
-            }
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ReadDepartment>> GetDepartmentByIdAsync(int id)
-        {
-            if (id < 1)
-                BadRequest($"Echec de recupération d'un departement : Il n'existe pas de departement avec cet Id {id}");
-
-            try
-            {
-                var department = await _departementService.GetDepartmentByIdAsync(id);
-                return Ok(department);
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
-
-        }
-
-        // POST api/<DepartmentsController>
+        // POST api/<EmployeesController>
         [HttpPost]
-        public async Task<ActionResult<ReadDepartment>> Post([FromBody] CreateDepartment department)
+        public async Task<ActionResult<ReadEmployee>> Post([FromBody] CreateEmployee employee)
         {
-            if (department == null || string.IsNullOrWhiteSpace(department.Name)
-                || string.IsNullOrWhiteSpace(department.Address) || string.IsNullOrWhiteSpace(department.Description))
+            if (
+                employee == null
+                || string.IsNullOrWhiteSpace(employee.FirstName)
+                || string.IsNullOrWhiteSpace(employee.LastName)
+                || string.IsNullOrWhiteSpace(employee.Email)
+                || string.IsNullOrWhiteSpace(employee.PhoneNumber)
+                || employee.Position == null
+            )
             {
-                return BadRequest("Echec de création d'un departement : les informations sont null ou vides");
+                return BadRequest(
+                    "Echec de création d'un departement : les informations sont null ou vides"
+                );
             }
 
             try
             {
-                var departmentCreated = await _departementService.CreateDepartmentAsync(department);
-                return Ok(departmentCreated);
+                var employeeCreated = await _employeeService.CreateEmployeeAsync(employee);
+                return Ok(employeeCreated);
             }
             catch (Exception ex)
             {
@@ -83,22 +49,47 @@ namespace Smanageemploy.Controllers
             }
         }
 
+        // GET api/<EmployeesController>
+        [HttpGet]
+        public async Task<ActionResult<List<ReadEmployee>>> Get()
+        {
+            try
+            {
+                var employees = await _employeeService.GetEmployees();
+                return Ok(employees);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        // GET api/<EmployeesController>/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ReadEmployee>> Get(int id)
+        {
+            try
+            {
+                var employee = await _employeeService.GetEmployeeByIdAsync(id);
+                return Ok(employee);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        // PUT api/<EmployeesController>/{id}
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateDepartementAsync(int id,[FromBody] UpdateDepartment department)
+        public async Task<ActionResult<ReadEmployee>> Put(
+            int id,
+            [FromBody] UpdateEmployee updateEmployee
+        )
         {
-            if (department == null || string.IsNullOrWhiteSpace(department.Name)
-                || string.IsNullOrWhiteSpace(department.Address) || string.IsNullOrWhiteSpace(department.Description))
-            {
-                return BadRequest("Echec de mise jour d'un departement : les informations sont null ou vides");
-            }
-
             try
             {
-                await _departementService.UpdateDepartmentAsync(id, department);
-                return Ok(new
-                {
-                    Message = $"Succès de la mise à jour du departement : {id}",
-                }) ;
+                var employee = await _employeeService.UpdateEmployeeAsync(id, updateEmployee);
+                return Ok(employee);
             }
             catch (Exception ex)
             {
@@ -106,20 +97,14 @@ namespace Smanageemploy.Controllers
             }
         }
 
-
+        // DELETE api/<EmployeesController>/{id}
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteDepartementByIdAsync(int id)
+        public async Task<ActionResult<ReadEmployee>> Delete(int id)
         {
-            if (id < 1)
-                BadRequest($"Echec de suppression d'un departement : Il n'existe pas de departement avec cet Id {id}");
-
             try
             {
-                await _departementService.DeleteDepartmentById(id);
-                return Ok(new
-                {
-                    Message = $"Succès de la suppression du departement : {id}",
-                });
+                var employee = await _employeeService.DeleteEmployeeById(id);
+                return Ok(employee);
             }
             catch (Exception ex)
             {

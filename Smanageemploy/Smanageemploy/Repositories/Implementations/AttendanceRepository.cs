@@ -5,57 +5,58 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Smanageemploy.Repositories.Implementations
 {
-    public class DepartementRepository : IDepartementRepository
+    public class AttendanceRepository
     {
-        private readonly ManageEmployeeDbContext _dbContext;
+        private readonly ManageEmployeeDbContext _manageEmployeeDbContext;
 
-        public DepartementRepository(ManageEmployeeDbContext dbContext)
+        public AttendanceRepository(ManageEmployeeDbContext manageEmployeeDbContext)
         {
-            _dbContext = dbContext;
+            _manageEmployeeDbContext = manageEmployeeDbContext;
         }
 
-        public async Task<List<Department>> GetDepartmentsAsync()
+        public async Task<Attendance> CreateAttendanceAsync(Attendance attendanceToCreate)
         {
-            return await _dbContext.Departments.ToListAsync();
+            await _manageEmployeeDbContext.Attendances.AddAsync(attendanceToCreate);
+            await _manageEmployeeDbContext.SaveChangesAsync();
+
+            return attendanceToCreate;
         }
 
-        public async Task<Department> GetDepartmentByIdAsync(int departmentId)
+        public async Task<List<Attendance>> GetAttendancesAsync()
         {
-            return await _dbContext.Departments.FirstOrDefaultAsync(x => x.DepartmentId == departmentId);
+            return await _manageEmployeeDbContext.Attendances.ToListAsync();
         }
 
-        public async Task<Department> GetDepartmentByIdWithIncludeAsync(int departmentId)
+        public async Task<Attendance> GetAttendanceByIdAsync(int attendanceId)
         {
-            return await _dbContext.Departments
-                .Include(x => x.Employees)
-                .FirstOrDefaultAsync(x => x.DepartmentId == departmentId);
+            return await _manageEmployeeDbContext.Attendances.FirstOrDefaultAsync(
+                x => x.AttendanceId == attendanceId
+            );
         }
 
-        public async Task<Department> GetDepartmentByNameAsync(string departmentName)
+        public async Task<Attendance> GetAttendanceByIdWithIncludeAsync(int attendanceId)
         {
-            return await _dbContext.Departments.FirstOrDefaultAsync(x => x.Name == departmentName);
+            return await _manageEmployeeDbContext
+                .Attendances.Include(x => x.Employee)
+                .FirstOrDefaultAsync(x => x.AttendanceId == attendanceId);
         }
 
-        public async Task UpdateDepartmentAsync(Department departmentToUpdate)
+        public async Task<Attendance> UpdateAttendanceAsync(Attendance attendanceToUpdate)
         {
-            _dbContext.Departments.Update(departmentToUpdate);
-            await _dbContext.SaveChangesAsync();
+            _manageEmployeeDbContext.Attendances.Update(attendanceToUpdate);
+            await _manageEmployeeDbContext.SaveChangesAsync();
+
+            return attendanceToUpdate;
         }
 
-        public async Task<Department> CreateDepartmentAsync(Department departmentToCreate)
+        public async Task<Attendance> DeleteAttendanceByIdAsync(int attendanceId)
         {
-            await _dbContext.Departments.AddAsync(departmentToCreate);
-            await _dbContext.SaveChangesAsync();
-
-            return departmentToCreate;
-        }
-
-        public async Task<Department> DeleteDepartmentByIdAsync(int departmentId)
-        {
-            var departmentToDelete = await _dbContext.Departments.FindAsync(departmentId);
-            _dbContext.Departments.Remove(departmentToDelete);
-            await _dbContext.SaveChangesAsync();
-            return departmentToDelete;
+            var attendanceToDelete = await _manageEmployeeDbContext.Attendances.FindAsync(
+                attendanceId
+            );
+            _manageEmployeeDbContext.Attendances.Remove(attendanceToDelete);
+            await _manageEmployeeDbContext.SaveChangesAsync();
+            return attendanceToDelete;
         }
     }
 }

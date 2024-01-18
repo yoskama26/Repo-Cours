@@ -5,57 +5,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Smanageemploy.Repositories.Implementations
 {
-    public class DepartementRepository : IDepartementRepository
+    public class StatusRepository
     {
-        private readonly ManageEmployeeDbContext _dbContext;
+        private readonly ManageEmployeeDbContext _manageEmployeeDbContext;
 
-        public DepartementRepository(ManageEmployeeDbContext dbContext)
+        public StatusRepository(ManageEmployeeDbContext manageEmployeeDbContext)
         {
-            _dbContext = dbContext;
+            _manageEmployeeDbContext = manageEmployeeDbContext;
         }
 
-        public async Task<List<Department>> GetDepartmentsAsync()
+        public async Task<List<Status>> GetStatusesAsync()
         {
-            return await _dbContext.Departments.ToListAsync();
+            return await _manageEmployeeDbContext.Statuses.ToListAsync();
         }
 
-        public async Task<Department> GetDepartmentByIdAsync(int departmentId)
+        public async Task<Status> GetStatusByIdAsync(int statusId)
         {
-            return await _dbContext.Departments.FirstOrDefaultAsync(x => x.DepartmentId == departmentId);
-        }
-
-        public async Task<Department> GetDepartmentByIdWithIncludeAsync(int departmentId)
-        {
-            return await _dbContext.Departments
-                .Include(x => x.Employees)
-                .FirstOrDefaultAsync(x => x.DepartmentId == departmentId);
-        }
-
-        public async Task<Department> GetDepartmentByNameAsync(string departmentName)
-        {
-            return await _dbContext.Departments.FirstOrDefaultAsync(x => x.Name == departmentName);
-        }
-
-        public async Task UpdateDepartmentAsync(Department departmentToUpdate)
-        {
-            _dbContext.Departments.Update(departmentToUpdate);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task<Department> CreateDepartmentAsync(Department departmentToCreate)
-        {
-            await _dbContext.Departments.AddAsync(departmentToCreate);
-            await _dbContext.SaveChangesAsync();
-
-            return departmentToCreate;
-        }
-
-        public async Task<Department> DeleteDepartmentByIdAsync(int departmentId)
-        {
-            var departmentToDelete = await _dbContext.Departments.FindAsync(departmentId);
-            _dbContext.Departments.Remove(departmentToDelete);
-            await _dbContext.SaveChangesAsync();
-            return departmentToDelete;
+            return await _manageEmployeeDbContext.Statuses.FirstOrDefaultAsync(
+                x => x.StatusId == statusId
+            );
         }
     }
 }

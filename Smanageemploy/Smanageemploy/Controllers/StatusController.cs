@@ -11,115 +11,38 @@ namespace Smanageemploy.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DepartmentsController : ControllerBase
+    public class StatusController : ControllerBase
     {
-        private readonly IDepartementService _departementService;
+        private readonly StatusService _statusService;
 
-        public DepartmentsController(IDepartementService departementService)
+        public StatusController(StatusService statusService)
         {
-            _departementService = departementService;
+            _statusService = statusService;
         }
 
+        // GET api/<StatusController>
         [HttpGet]
-        public async Task<ActionResult<List<ReadDepartment>>> GetDepartmentsAsync()
+        public async Task<ActionResult<List<ReadStatus>>> Get()
         {
-            var departments = await _departementService.GetDepartments();
-            return Ok(departments);
-        }
-
-        [HttpGet("{name}")]
-        public async Task<ActionResult<ReadDepartment>> GetDepartmentByIdAsync(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                BadRequest("Echec de recupération d'un departement : le nom du departement est invalide");
-
             try
             {
-                var department = await _departementService.GetDepartmentByNameAsync(name);
-                return Ok(department);
+                var statuss = await _statusService.GetStatuses();
+                return Ok(statuss);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return Problem(ex.Message);
             }
         }
 
+        // GET api/<StatusController>/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<ReadDepartment>> GetDepartmentByIdAsync(int id)
+        public async Task<ActionResult<ReadStatus>> Get(int id)
         {
-            if (id < 1)
-                BadRequest($"Echec de recupération d'un departement : Il n'existe pas de departement avec cet Id {id}");
-
             try
             {
-                var department = await _departementService.GetDepartmentByIdAsync(id);
-                return Ok(department);
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
-
-        }
-
-        // POST api/<DepartmentsController>
-        [HttpPost]
-        public async Task<ActionResult<ReadDepartment>> Post([FromBody] CreateDepartment department)
-        {
-            if (department == null || string.IsNullOrWhiteSpace(department.Name)
-                || string.IsNullOrWhiteSpace(department.Address) || string.IsNullOrWhiteSpace(department.Description))
-            {
-                return BadRequest("Echec de création d'un departement : les informations sont null ou vides");
-            }
-
-            try
-            {
-                var departmentCreated = await _departementService.CreateDepartmentAsync(department);
-                return Ok(departmentCreated);
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
-        }
-
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateDepartementAsync(int id,[FromBody] UpdateDepartment department)
-        {
-            if (department == null || string.IsNullOrWhiteSpace(department.Name)
-                || string.IsNullOrWhiteSpace(department.Address) || string.IsNullOrWhiteSpace(department.Description))
-            {
-                return BadRequest("Echec de mise jour d'un departement : les informations sont null ou vides");
-            }
-
-            try
-            {
-                await _departementService.UpdateDepartmentAsync(id, department);
-                return Ok(new
-                {
-                    Message = $"Succès de la mise à jour du departement : {id}",
-                }) ;
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
-        }
-
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteDepartementByIdAsync(int id)
-        {
-            if (id < 1)
-                BadRequest($"Echec de suppression d'un departement : Il n'existe pas de departement avec cet Id {id}");
-
-            try
-            {
-                await _departementService.DeleteDepartmentById(id);
-                return Ok(new
-                {
-                    Message = $"Succès de la suppression du departement : {id}",
-                });
+                var status = await _statusService.GetStatusByIdAsync(id);
+                return Ok(status);
             }
             catch (Exception ex)
             {

@@ -5,155 +5,152 @@ using Smanageemploy.Services.Contracts;
 
 namespace Smanageemploy.Services.Implementations
 {
-    public class DepartementService : IDepartementService
+    public class LeaverequestService
     {
-        private readonly IDepartementRepository _departementRepository;
-        public DepartementService(IDepartementRepository departementRepository)
+        private readonly LeaverequestRepository _leaverequestRepository;
+
+        public LeaverequestService(LeaverequestRepository leaverequestRepository)
         {
-            _departementRepository = departementRepository;
+            _leaverequestRepository = leaverequestRepository;
         }
 
-        /// <summary>
-        /// Gets the departments.
-        /// </summary>
-        /// <returns></returns>
-        public async Task<List<ReadDepartment>> GetDepartments()
+        public async Task<ReadLeaverequest> CreateLeaverequestAsync(CreateLeaverequest leaverequest)
         {
-            var departments = await _departementRepository.GetDepartmentsAsync();
+            //var leaverequestGet = await _leaverequestRepository.GetLeaverequestByNameAsync(
+            //    leaverequest.Name
+            //);
+            //if (leaverequestGet is not null)
+            //{
+            //    throw new Exception(
+            //        $"Echec de création d'un département : Il existe déjà un département avec ce nom {leaverequest.Name}"
+            //    );
+            //}
 
-            List<ReadDepartment> readDepartments = new List<ReadDepartment>();
-
-            foreach (var department in departments)
+            if (leaverequest.StartDate > leaverequest.EndDate)
             {
-                readDepartments.Add(new ReadDepartment()
-                {
-                    Id = department.DepartmentId,
-                    Name = department.Name,
-                });
+                throw new Exception(
+                    $"Echec de création d'un département : Il existe déjà un département avec ce nom {leaverequest.StartDate}"
+                );
             }
 
-            return readDepartments;
-        }
-
-        /// <summary>
-        /// Gets the department by identifier asynchronous.
-        /// </summary>
-        /// <param name="departmentId">The department identifier.</param>
-        /// <returns></returns>
-        /// <exception cref="System.Exception">Echec de recupération des informations d'un département car il n'existe pas : {departmentId}</exception>
-        public async Task<ReadDepartment> GetDepartmentByIdAsync(int departmentId)
-        {
-            var department = await _departementRepository.GetDepartmentByIdAsync(departmentId);
-
-            if (department is null)
-                throw new Exception($"Echec de recupération des informations d'un département car il n'existe pas : {departmentId}");
-
-            return new ReadDepartment()
+            var leaverequestTocreate = new Leaverequest()
             {
-                Id = department.DepartmentId,
-                Name = department.Name,
+                EmployeeId = leaverequest.EmployeeId,
+                StatusId = leaverequest.StatusId,
+                RequestDate = leaverequest.RequestDate,
+                StartDate = leaverequest.StartDate,
+                EndDate = leaverequest.EndDate,
+            };
+
+            var leaverequestCreated = await _leaverequestRepository.CreateLeaverequestAsync(
+                leaverequestTocreate
+            );
+
+            return new ReadLeaverequest()
+            {
+                Id = leaverequestCreated.LeaveRequestId,
+                EmployeeId = (int)leaverequestCreated.EmployeeId,
+                StatusId = (int)leaverequestCreated.StatusId,
+                RequestDate = leaverequestCreated.RequestDate,
+                StartDate = leaverequestCreated.StartDate,
+                EndDate = leaverequestCreated.EndDate,
             };
         }
 
-        /// <summary>
-        /// Gets the department by name asynchronous.
-        /// </summary>
-        /// <param name="departmentName">Name of the department.</param>
-        /// <returns></returns>
-        /// <exception cref="System.Exception">Echec de recupération des informations d'un département car il n'existe pas de nom correspondant : {departmentName}</exception>
-        public async Task<ReadDepartment> GetDepartmentByNameAsync(string departmentName)
+        public async Task<List<ReadLeaverequest>> GetLeaverequests()
         {
-            var department = await _departementRepository.GetDepartmentByNameAsync(departmentName);
+            var leaverequests = await _leaverequestRepository.GetLeaverequestsAsync();
 
-            if (department is null)
-                throw new Exception($"Echec de recupération des informations d'un département car il n'existe pas de nom correspondant : {departmentName}");
+            List<ReadLeaverequest> readLeaverequests = new List<ReadLeaverequest>();
 
-            return new ReadDepartment()
+            foreach (var leaverequest in leaverequests)
             {
-                Id = department.DepartmentId,
-                Name = department.Name,
+                readLeaverequests.Add(
+                    new ReadLeaverequest()
+                    {
+                        Id = leaverequest.LeaveRequestId,
+                        EmployeeId = (int)leaverequest.EmployeeId,
+                        StatusId = (int)leaverequest.StatusId,
+                        RequestDate = leaverequest.RequestDate,
+                        StartDate = leaverequest.StartDate,
+                        EndDate = leaverequest.EndDate,
+                    }
+                );
+            }
+
+            return readLeaverequests;
+        }
+
+        public async Task<ReadLeaverequest> GetLeaverequestByIdAsync(int leaverequestId)
+        {
+            var leaverequest = await _leaverequestRepository.GetLeaverequestByIdAsync(
+                leaverequestId
+            );
+
+            if (leaverequest is null)
+                throw new Exception(
+                    $"Echec de recupération des informations d'un département car il n'existe pas : {leaverequestId}"
+                );
+
+            return new ReadLeaverequest()
+            {
+                Id = leaverequest.LeaveRequestId,
+                EmployeeId = (int)leaverequest.EmployeeId,
+                StatusId = (int)leaverequest.StatusId,
+                RequestDate = leaverequest.RequestDate,
+                StartDate = leaverequest.StartDate,
+                EndDate = leaverequest.EndDate,
             };
         }
 
-        /// <summary>
-        /// Updates the department asynchronous.
-        /// </summary>
-        /// <param name="departmentId">The department identifier.</param>
-        /// <param name="department">The department.</param>
-        /// <exception cref="System.Exception">
-        /// Echec de mise à jour d'un département : Il n'existe aucun departement avec cet identifiant : {departmentId}
-        /// or
-        /// Echec de mise à jour d'un département : Il existe déjà un département avec ce nom {department.Name}
-        /// </exception>
-        public async Task UpdateDepartmentAsync(int departmentId, UpdateDepartment department)
+        public async Task<Leaverequest> UpdateLeaverequestAsync(
+            int leaverequestId,
+            UpdateLeaverequest leaverequest
+        )
         {
-            var departmentGet = await _departementRepository.GetDepartmentByIdAsync(departmentId)
-                ?? throw new Exception($"Echec de mise à jour d'un département : Il n'existe aucun departement avec cet identifiant : {departmentId}");
+            var leaverequestUpdate =
+                await _leaverequestRepository.GetLeaverequestByIdAsync(leaverequestId)
+                ?? throw new Exception(
+                    $"Echec de mise à jour d'un département : Il n'existe aucun leaverequest avec cet identifiant : {leaverequestId}"
+                );
 
-            var departmentGetByName = await _departementRepository.GetDepartmentByNameAsync(department.Name);
-            if (departmentGetByName is not null && departmentId != departmentGetByName.DepartmentId)
-            {
-                throw new Exception($"Echec de mise à jour d'un département : Il existe déjà un département avec ce nom {department.Name}");
-            }
+            //var leaverequestGet = await _leaverequestRepository.GetLeaverequestByNameAsync(
+            //    leaverequest.Name
+            //);
+            //if (leaverequestGet is not null && leaverequestId != leaverequestGet.LeaverequestId)
+            //{
+            //    throw new Exception(
+            //        $"Echec de mise à jour d'un département : Il existe déjà un département avec ce nom {leaverequest.Name}"
+            //    );
+            //}
 
-            departmentGet.Name = department.Name;
-            departmentGet.Description = department.Description;
-            departmentGet.Address = department.Address;
+            leaverequestUpdate.EmployeeId = leaverequest.EmployeeId;
+            leaverequestUpdate.StatusId = leaverequest.StatusId;
+            leaverequestUpdate.StartDate = leaverequest.StartDate;
+            leaverequestUpdate.EndDate = leaverequest.EndDate;
+            leaverequestUpdate.RequestDate = leaverequest.RequestDate;
 
-            await _departementRepository.UpdateDepartmentAsync(departmentGet);
+            await _leaverequestRepository.UpdateLeaverequestAsync(leaverequestUpdate);
 
+            return leaverequestUpdate;
         }
 
-        /// <summary>
-        /// Deletes the department by identifier.
-        /// </summary>
-        /// <param name="departmentId">The department identifier.</param>
-        /// <exception cref="System.Exception">
-        /// Echec de suppression d'un département : Il n'existe aucun departement avec cet identifiant : {departmentId}
-        /// or
-        /// Echec de suppression car ce departement est lié à des employés
-        /// </exception>
-        public async Task DeleteDepartmentById(int departmentId)
+        public async Task<Leaverequest> DeleteLeaverequestById(int leaverequestId)
         {
-            var departmentGet = await _departementRepository.GetDepartmentByIdWithIncludeAsync(departmentId)
-              ?? throw new Exception($"Echec de suppression d'un département : Il n'existe aucun departement avec cet identifiant : {departmentId}");
+            var leaverequestGet =
+                await _leaverequestRepository.GetLeaverequestByIdWithIncludeAsync(leaverequestId)
+                ?? throw new Exception(
+                    $"Echec de suppression d'un département : Il n'existe aucun leaverequest avec cet identifiant : {leaverequestId}"
+                );
 
-            if (departmentGet.Employees.Any())
-            {
-                throw new Exception("Echec de suppression car ce departement est lié à des employés");
-            }
+            //if (leaverequestGet.Employees.Any())
+            //{
+            //    throw new Exception(
+            //        "Echec de suppression car ce leaverequest est lié à des employés"
+            //    );
+            //}
 
-            await _departementRepository.DeleteDepartmentByIdAsync(departmentId);
-        }
-
-        /// <summary>
-        /// Creates the department asynchronous.
-        /// </summary>
-        /// <param name="department">The department.</param>
-        /// <returns></returns>
-        /// <exception cref="System.Exception">Echec de création d'un département : Il existe déjà un département avec ce nom {department.Name}</exception>
-        public async Task<ReadDepartment> CreateDepartmentAsync(CreateDepartment department)
-        {
-            var departmentGet = await _departementRepository.GetDepartmentByNameAsync(department.Name);
-            if (departmentGet is not null)
-            {
-                throw new Exception($"Echec de création d'un département : Il existe déjà un département avec ce nom {department.Name}");
-            }
-
-            var departementTocreate = new Department()
-            {
-                Name = department.Name,
-                Description = department.Description,
-                Address = department.Address,
-            };
-
-            var departmentCreated = await _departementRepository.CreateDepartmentAsync(departementTocreate);
-
-            return new ReadDepartment()
-            {
-                Id = departmentCreated.DepartmentId,
-                Name = departmentCreated.Name,
-            };
+            return await _leaverequestRepository.DeleteLeaverequestByIdAsync(leaverequestId);
         }
     }
 }

@@ -5,57 +5,58 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Smanageemploy.Repositories.Implementations
 {
-    public class DepartementRepository : IDepartementRepository
+    public class LeaverequestRepository
     {
-        private readonly ManageEmployeeDbContext _dbContext;
+        private readonly ManageEmployeeDbContext _manageEmployeeDbContext;
 
-        public DepartementRepository(ManageEmployeeDbContext dbContext)
+        public LeaverequestRepository(ManageEmployeeDbContext manageEmployeeDbContext)
         {
-            _dbContext = dbContext;
+            _manageEmployeeDbContext = manageEmployeeDbContext;
         }
 
-        public async Task<List<Department>> GetDepartmentsAsync()
+        public async Task<Leaverequest> CreateLeaverequestAsync(Leaverequest leaverequestToCreate)
         {
-            return await _dbContext.Departments.ToListAsync();
+            await _manageEmployeeDbContext.Leaverequests.AddAsync(leaverequestToCreate);
+            await _manageEmployeeDbContext.SaveChangesAsync();
+
+            return leaverequestToCreate;
         }
 
-        public async Task<Department> GetDepartmentByIdAsync(int departmentId)
+        public async Task<List<Leaverequest>> GetLeaverequestsAsync()
         {
-            return await _dbContext.Departments.FirstOrDefaultAsync(x => x.DepartmentId == departmentId);
+            return await _manageEmployeeDbContext.Leaverequests.ToListAsync();
         }
 
-        public async Task<Department> GetDepartmentByIdWithIncludeAsync(int departmentId)
+        public async Task<Leaverequest> GetLeaverequestByIdAsync(int leaverequestId)
         {
-            return await _dbContext.Departments
-                .Include(x => x.Employees)
-                .FirstOrDefaultAsync(x => x.DepartmentId == departmentId);
+            return await _manageEmployeeDbContext.Leaverequests.FirstOrDefaultAsync(
+                x => x.LeaveRequestId == leaverequestId
+            );
         }
 
-        public async Task<Department> GetDepartmentByNameAsync(string departmentName)
+        public async Task<Leaverequest> GetLeaverequestByIdWithIncludeAsync(int leaverequestId)
         {
-            return await _dbContext.Departments.FirstOrDefaultAsync(x => x.Name == departmentName);
+            return await _manageEmployeeDbContext
+                .Leaverequests.Include(x => x.Employee)
+                .FirstOrDefaultAsync(x => x.LeaveRequestId == leaverequestId);
         }
 
-        public async Task UpdateDepartmentAsync(Department departmentToUpdate)
+        public async Task<Leaverequest> UpdateLeaverequestAsync(Leaverequest leaverequestToUpdate)
         {
-            _dbContext.Departments.Update(departmentToUpdate);
-            await _dbContext.SaveChangesAsync();
+            _manageEmployeeDbContext.Leaverequests.Update(leaverequestToUpdate);
+            await _manageEmployeeDbContext.SaveChangesAsync();
+
+            return leaverequestToUpdate;
         }
 
-        public async Task<Department> CreateDepartmentAsync(Department departmentToCreate)
+        public async Task<Leaverequest> DeleteLeaverequestByIdAsync(int leaverequestId)
         {
-            await _dbContext.Departments.AddAsync(departmentToCreate);
-            await _dbContext.SaveChangesAsync();
-
-            return departmentToCreate;
-        }
-
-        public async Task<Department> DeleteDepartmentByIdAsync(int departmentId)
-        {
-            var departmentToDelete = await _dbContext.Departments.FindAsync(departmentId);
-            _dbContext.Departments.Remove(departmentToDelete);
-            await _dbContext.SaveChangesAsync();
-            return departmentToDelete;
+            var leaverequestToDelete = await _manageEmployeeDbContext.Leaverequests.FindAsync(
+                leaverequestId
+            );
+            _manageEmployeeDbContext.Leaverequests.Remove(leaverequestToDelete);
+            await _manageEmployeeDbContext.SaveChangesAsync();
+            return leaverequestToDelete;
         }
     }
 }
