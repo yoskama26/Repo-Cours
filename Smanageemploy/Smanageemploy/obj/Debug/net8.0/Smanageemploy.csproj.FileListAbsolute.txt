@@ -102,3 +102,14 @@ F:\repos\Smanageemploy\Smanageemploy\obj\Debug\net8.0\refint\Smanageemploy.dll
 F:\repos\Smanageemploy\Smanageemploy\obj\Debug\net8.0\Smanageemploy.pdb
 F:\repos\Smanageemploy\Smanageemploy\obj\Debug\net8.0\Smanageemploy.genruntimeconfig.cache
 F:\repos\Smanageemploy\Smanageemploy\obj\Debug\net8.0\ref\Smanageemploy.dll
+F:\repos\Repo-Cours\Smanageemploy\Smanageemploy\obj\Debug\net8.0\Smanageemploy.csproj.AssemblyReference.cache
+F:\repos\Repo-Cours\Smanageemploy\Smanageemploy\obj\Debug\net8.0\Smanageemploy.GeneratedMSBuildEditorConfig.editorconfig
+F:\repos\Repo-Cours\Smanageemploy\Smanageemploy\obj\Debug\net8.0\Smanageemploy.AssemblyInfoInputs.cache
+F:\repos\Repo-Cours\Smanageemploy\Smanageemploy\obj\Debug\net8.0\Smanageemploy.AssemblyInfo.cs
+F:\repos\Repo-Cours\Smanageemploy\Smanageemploy\obj\Debug\net8.0\Smanageemploy.csproj.CoreCompileInputs.cache
+F:\repos\Repo-Cours\Smanageemploy\Smanageemploy\obj\Debug\net8.0\Smanageemploy.MvcApplicationPartsAssemblyInfo.cs
+F:\repos\Repo-Cours\Smanageemploy\Smanageemploy\obj\Debug\net8.0\Smanageemploy.MvcApplicationPartsAssemblyInfo.cache
+F:\repos\Repo-Cours\Smanageemploy\Smanageemploy\obj\Debug\net8.0\Smanageemploy.sourcelink.json
+F:\repos\Repo-Cours\Smanageemploy\Smanageemploy\obj\Debug\net8.0\Smanageemploy.dll
+F:\repos\Repo-Cours\Smanageemploy\Smanageemploy\obj\Debug\net8.0\refint\Smanageemploy.dll
+F:\repos\Repo-Cours\Smanageemploy\Smanageemploy\obj\Debug\net8.0\Smanageemploy.pdb

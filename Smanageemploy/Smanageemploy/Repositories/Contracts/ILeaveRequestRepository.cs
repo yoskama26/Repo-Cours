@@ -1,21 +1,21 @@
 ﻿using Smanageemploy.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Smanageemploy.Repositories.Contracts
 {
-    public interface IDepartementRepository
+    public interface ILeaverequestRepository
     {
-        Task<List<Department>> GetDepartmentsAsync();
+        Task<Leaverequest> CreateLeaverequestAsync(Leaverequest leaverequestToCreate);
 
-        Task<Department> GetDepartmentByIdAsync(int departmentId);
+        Task<List<Leaverequest>> GetLeaverequestsAsync();
 
-        Task<Department> GetDepartmentByIdWithIncludeAsync(int departmentId);
+        Task<Leaverequest> GetLeaverequestByIdAsync(int leaverequestId);
 
-        Task<Department> GetDepartmentByNameAsync(string departmentName);
+        Task<Leaverequest> GetLeaverequestByIdWithIncludeAsync(int leaverequestId);
 
-        Task UpdateDepartmentAsync(Department departmentToUpdate);
+        Task<Leaverequest> UpdateLeaverequestAsync(Leaverequest leaverequestToUpdate);
 
-        Task<Department> CreateDepartmentAsync(Department departmentToCreate);
-
-        Task<Department> DeleteDepartmentByIdAsync(int departmentId);
+        Task<Leaverequest> DeleteLeaverequestByIdAsync(int leaverequestId);
     }
 }

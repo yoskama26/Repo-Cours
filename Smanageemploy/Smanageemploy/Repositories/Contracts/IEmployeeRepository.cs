@@ -1,20 +1,18 @@
 ﻿using Smanageemploy.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Smanageemploy.Repositories.Contracts
 {
-    public interface IDepartementRepository
+    public interface IEmployeeRepository
     {
         Task<List<Employee>> GetEmployeesAsync();
 
-        Task<Employee> GetEmployeeByIdAsync(int employee_id);
+        Task<Employee> GetEmployeeByIdAsync(int employeeId);
 
-        Task<Employee> GetEmployeeByIdWithIncludeAsync(int employee_id);
+        Task<Employee> GetEmployeeByIdWithIncludeAsync(int employeeId);
 
-        Task<Employee> GetEmployeeByNameAsync(string employeefirst_name);
-        Task<Employee> GetEmployeeByNameAsync(string employeelast_name);
-        Task<Employee> GetEmployeeByNameAsync(string employeeemail);
-        Task<Employee> GetEmployeeByNameAsync(string employeephone_number);
-        Task<Employee> GetEmployeeByNameAsync(string employeeposition);
+        Task<Employee> GetEmployeeByNameAsync(string employeeName);
 
         Task UpdateEmployeeAsync(Employee employeeToUpdate);
 

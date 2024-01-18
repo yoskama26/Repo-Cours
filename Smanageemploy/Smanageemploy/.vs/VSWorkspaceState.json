@@ -2,7 +2,6 @@
   "ExpandedNodes": [
     "",
     "\\Controllers",
-    "\\Dtos\\Department",
     "\\Entities",
     "\\Infrastructures",
     "\\Infrastructures\\Database",
@@ -11,6 +10,6 @@
     "\\Services\\Contracts",
     "\\Services\\Implementations"
   ],
-  "SelectedNode": "\\Controllers\\DepartmentsEmployeeController.cs",
+  "SelectedNode": "\\Services\\Implementations\\DepartementService.cs",
   "PreviewInSolutionExplorer": false
 }

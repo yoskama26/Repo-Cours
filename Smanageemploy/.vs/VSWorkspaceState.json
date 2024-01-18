@@ -2,8 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\Smanageemploy",
-    "\\Smanageemploy\\Infrastructures",
-    "\\Smanageemploy\\Infrastructures\\Database",
+    "\\Smanageemploy\\Controllers",
     "\\Smanageemploy\\Properties",
     "\\Smanageemploy\\Repositories",
     "\\Smanageemploy\\Repositories\\Contracts",
@@ -12,6 +11,6 @@
     "\\Smanageemploy\\Services\\Contracts",
     "\\Smanageemploy\\Services\\Implementations"
   ],
-  "SelectedNode": "\\Smanageemploy\\Services\\Implementations\\DepartementService.cs",
+  "SelectedNode": "\\Smanageemploy\\Controllers",
   "PreviewInSolutionExplorer": false
 }

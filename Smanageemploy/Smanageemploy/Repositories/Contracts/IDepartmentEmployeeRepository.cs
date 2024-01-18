@@ -1,21 +1,23 @@
 ﻿using Smanageemploy.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Smanageemploy.Repositories.Contracts
 {
-    public interface IDepartementRepository
+    public interface IEmployeeRepository
     {
-        Task<List<Department>> GetDepartmentsAsync();
+        Task<List<Employee>> GetEmployeesAsync();
 
-        Task<Department> GetDepartmentByIdAsync(int departmentId);
+        Task<Employee> GetEmployeeByIdAsync(int employeeId);
 
-        Task<Department> GetDepartmentByIdWithIncludeAsync(int departmentId);
+        Task<Employee> GetEmployeeByIdWithIncludeAsync(int employeeId);
 
-        Task<Department> GetDepartmentByNameAsync(string departmentName);
+        Task<Employee> GetEmployeeByNameAsync(string employeeName);
 
-        Task UpdateDepartmentAsync(Department departmentToUpdate);
+        Task UpdateEmployeeAsync(Employee employeeToUpdate);
 
-        Task<Department> CreateDepartmentAsync(Department departmentToCreate);
+        Task<Employee> CreateEmployeeAsync(Employee employeeToCreate);
 
-        Task<Department> DeleteDepartmentByIdAsync(int departmentId);
+        Task<Employee> DeleteEmployeeByIdAsync(int employeeId);
     }
 }
