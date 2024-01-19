@@ -1,15 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Controllers",
-    "\\Entities",
-    "\\Infrastructures",
-    "\\Infrastructures\\Database",
-    "\\Properties",
-    "\\Services",
-    "\\Services\\Contracts",
-    "\\Services\\Implementations"
+    "\\Dtos",
+    "\\Dtos\\Attendance",
+    "\\Dtos\\Employee",
+    "\\Dtos\\EmployeeDepartment",
+    "\\Dtos\\Leaverequest",
+    "\\Dtos\\Status",
+    "\\Repositories",
+    "\\Repositories\\Contracts",
+    "\\Repositories\\Implementations"
   ],
-  "SelectedNode": "\\Services\\Implementations\\DepartementService.cs",
+  "SelectedNode": "\\Program.cs",
   "PreviewInSolutionExplorer": false
 }
