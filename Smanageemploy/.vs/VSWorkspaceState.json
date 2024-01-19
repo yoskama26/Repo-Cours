@@ -1,16 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Smanageemploy",
-    "\\Smanageemploy\\Controllers",
-    "\\Smanageemploy\\Properties",
-    "\\Smanageemploy\\Repositories",
-    "\\Smanageemploy\\Repositories\\Contracts",
-    "\\Smanageemploy\\Repositories\\Implementations",
-    "\\Smanageemploy\\Services",
-    "\\Smanageemploy\\Services\\Contracts",
-    "\\Smanageemploy\\Services\\Implementations"
+    "\\backend",
+    "\\backend\\Controllers",
+    "\\backend\\Properties",
+    "\\backend\\Repositories"
   ],
-  "SelectedNode": "\\Smanageemploy\\Repositories\\Contracts\\IDepartementRepository.cs",
+  "SelectedNode": "\\backend\\Program.cs",
   "PreviewInSolutionExplorer": false
 }

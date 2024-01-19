@@ -1,6 +1,0 @@
-@Smanageemploy_HostAddress = http://localhost:5208
-
-GET {{Smanageemploy_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
