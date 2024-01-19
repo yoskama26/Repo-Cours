@@ -6,7 +6,7 @@ namespace Smanageemploy.Repositories.Contracts
 {
     public interface IAttendanceRepository
     {
-        Task<Attendance> CreateAttendanceAsync(Attendance attendanceToCreate);
+        Task<Attendance> CreateAttendanceAsync(string attendanceToCreate);
 
         Task<List<Attendance>> GetAttendancesAsync();
 
@@ -14,7 +14,7 @@ namespace Smanageemploy.Repositories.Contracts
 
         Task<Attendance> GetAttendanceByIdWithIncludeAsync(int attendanceId);
 
-        Task<Attendance> UpdateAttendanceAsync(Attendance attendanceToUpdate);
+        Task<Attendance> UpdateAttendanceAsync(string attendanceToUpdate);
 
         Task<Attendance> DeleteAttendanceByIdAsync(int attendanceId);
     }

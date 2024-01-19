@@ -11,6 +11,6 @@
     "\\Smanageemploy\\Services\\Contracts",
     "\\Smanageemploy\\Services\\Implementations"
   ],
-  "SelectedNode": "\\Smanageemploy\\Controllers",
+  "SelectedNode": "\\Smanageemploy\\Repositories\\Contracts\\IDepartementRepository.cs",
   "PreviewInSolutionExplorer": false
 }

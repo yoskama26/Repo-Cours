@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Smanageemploy")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ff063f6b19c2d170c6def2b9d7abc23e6f198cd9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+01ebbbb8bc9ce0f9503b29e6e66b83df3d0b2acb")]
 [assembly: System.Reflection.AssemblyProductAttribute("Smanageemploy")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Smanageemploy")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
